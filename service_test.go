@@ -19,7 +19,7 @@ import (
 	"os"
 )
 
-func ExampleMakeHTTPHandler() {
+func ExampleNew() {
 	var logger log.Logger
 	logger = log.NewLogfmtLogger(log.StdlibWriter{})
 

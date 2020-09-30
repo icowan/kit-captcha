@@ -33,6 +33,7 @@ func MakeHTTPHandler(logger kitlog.Logger, s Service, opts []kithttp.ServerOptio
 	eps := NewEndpoint(s, map[string][]endpoint.Middleware{
 		"Captcha": ems,
 		"Refresh": ems,
+		"Verify":  ems,
 	}, prefix)
 
 	r := mux.NewRouter()
