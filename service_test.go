@@ -1,11 +1,11 @@
-# kit-captcha
-go-kit 验证码包
+/**
+ * @Time: 2020/9/30 14:05
+ * @Author: solacowa@gmail.com
+ * @File: service_test
+ * @Software: GoLand
+ */
 
-## 安装
-
-## 使用
-
-```go 
+package captcha
 
 import (
 	"context"
@@ -17,10 +17,9 @@ import (
 	kithttp "github.com/go-kit/kit/transport/http"
 	"net/http"
 	"os"
-	"testing"
 )
 
-func main() {
+func ExampleMakeHTTPHandler() {
 	var logger log.Logger
 	logger = log.NewLogfmtLogger(log.StdlibWriter{})
 
@@ -67,5 +66,3 @@ func accessControl(h http.Handler, logger log.Logger) http.Handler {
 		h.ServeHTTP(w, r)
 	})
 }
-
-```
