@@ -95,7 +95,7 @@ $ curl http://localhost:8080/captcha/refresh/image
 
 拿到上面获取到的captcha_id在浏览器打开 `http://localhost:8080/captcha/IOAUynIXiqfUs56dQgfg` 就能展示出图形验证码。
 
-![](media/16014521771539/16014543282053.jpg)
+![](http://source.qiniu.cnd.nsini.com/images/2020/09/9e/8d/3d/20200930-947c5cc13679d32a3106b9a78dd9e2eb.jpeg?imageView2/2/w/1280/interlace/0/q/70)
 
 可以传参数:
 
@@ -106,7 +106,7 @@ $ curl http://localhost:8080/captcha/refresh/image
 
 `http://localhost:8080/captcha/IOAUynIXiqfUs56dQgfg?w=320&h=120`
 
-![](media/16014521771539/16014544592239.jpg)
+![](http://source.qiniu.cnd.nsini.com/images/2020/09/84/54/4e/20200930-01792ce4837ae3794b30bb9e54c8448c.jpeg?imageView2/2/w/1280/interlace/0/q/70)
 
 
 ### 验证图形验证码
@@ -207,3 +207,4 @@ import redisclient "github.com/icowan/redis-client"
 rdsClient := redisclient.NewRedisClient(...)
 svc := New(logger, NewStore(rdsClient, logger, time.Minute*5), "trace-id")
 ```
+
