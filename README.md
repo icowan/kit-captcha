@@ -208,3 +208,10 @@ rdsClient := redisclient.NewRedisClient(...)
 svc := New(logger, NewStore(rdsClient, logger, time.Minute*5), "trace-id")
 ```
 
+
+## 尾巴
+
+有关go-kit的更多使用方法欢迎关注我。
+
+希望我写的东西对大家有用，谢谢！
+
