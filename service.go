@@ -65,6 +65,7 @@ func (s *service) GenCaptchaId(ctx context.Context) string {
 }
 
 func New(logger log.Logger, store captcha.Store, traceId string) Service {
+	logger = log.With(logger, "service", "kit-captcha")
 	return &service{
 		logger:  logger,
 		store:   store,

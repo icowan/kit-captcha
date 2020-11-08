@@ -16,21 +16,23 @@ import (
 )
 
 type loggingServer struct {
-	logger log.Logger
+	logger  log.Logger
+	traceId string
 	Service
 }
 
-func NewLoggingServer(logger log.Logger, s Service) Service {
+func NewLoggingServer(logger log.Logger, s Service, traceId string) Service {
 	return &loggingServer{
 		logger:  level.Info(logger),
 		Service: s,
+		traceId: traceId,
 	}
 }
 
 func (s *loggingServer) Image(ctx context.Context, captchaId string, w, h int) []byte {
 	defer func(begin time.Time) {
 		_ = s.logger.Log(
-			ctx.Value("context-trace-key"), ctx.Value(ctx.Value("context-trace-key")),
+			s.traceId, ctx.Value("traceId"),
 			"method", "Image",
 			"captchaId", captchaId,
 			"w", w,
@@ -45,7 +47,7 @@ func (s *loggingServer) Image(ctx context.Context, captchaId string, w, h int) [
 func (s *loggingServer) Refresh(ctx context.Context, w, h int) (captchaId string, res []byte) {
 	defer func(begin time.Time) {
 		_ = s.logger.Log(
-			ctx.Value("context-trace-key"), ctx.Value(ctx.Value("context-trace-key")),
+			s.traceId, ctx.Value("traceId"),
 			"method", "Refresh",
 			"w", w,
 			"h", h,
