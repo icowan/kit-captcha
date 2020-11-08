@@ -32,7 +32,7 @@ func NewLoggingServer(logger log.Logger, s Service, traceId string) Service {
 func (s *loggingServer) Image(ctx context.Context, captchaId string, w, h int) []byte {
 	defer func(begin time.Time) {
 		_ = s.logger.Log(
-			s.traceId, ctx.Value("traceId"),
+			s.traceId, ctx.Value(s.traceId),
 			"method", "Image",
 			"captchaId", captchaId,
 			"w", w,
@@ -47,7 +47,7 @@ func (s *loggingServer) Image(ctx context.Context, captchaId string, w, h int) [
 func (s *loggingServer) Refresh(ctx context.Context, w, h int) (captchaId string, res []byte) {
 	defer func(begin time.Time) {
 		_ = s.logger.Log(
-			s.traceId, ctx.Value("traceId"),
+			s.traceId, ctx.Value(s.traceId),
 			"method", "Refresh",
 			"w", w,
 			"h", h,
