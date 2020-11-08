@@ -39,7 +39,7 @@ func ExampleNew() {
 		captcha.Expiration,
 	), "trace-id")
 
-	svc = NewLoggingServer(logger, svc)
+	svc = NewLoggingServer(logger, svc, "trace-id")
 
 	var prefix = "/captcha/"
 
