@@ -28,8 +28,6 @@ func MakeHTTPHandler(logger kitlog.Logger, s Service, opts []kithttp.ServerOptio
 	prefix string,
 	encodeResponseFunc func(ctx context.Context, w http.ResponseWriter, response interface{}) (err error)) http.Handler {
 
-	s = NewLoggingServer(logger, s)
-
 	eps := NewEndpoint(s, map[string][]endpoint.Middleware{
 		"Captcha": ems,
 		"Refresh": ems,
