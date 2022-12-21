@@ -12,7 +12,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/go-kit/kit/endpoint"
-	kitlog "github.com/go-kit/kit/log"
 	kithttp "github.com/go-kit/kit/transport/http"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -23,7 +22,7 @@ const (
 	rateBucketNum = 100
 )
 
-func MakeHTTPHandler(logger kitlog.Logger, s Service, opts []kithttp.ServerOption,
+func MakeHTTPHandler(s Service, opts []kithttp.ServerOption,
 	ems []endpoint.Middleware,
 	prefix string,
 	encodeResponseFunc func(ctx context.Context, w http.ResponseWriter, response interface{}) (err error)) http.Handler {

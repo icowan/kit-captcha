@@ -45,18 +45,19 @@ func main() {
 
 	var ems []endpoint.Middleware
 
-	svc := New(logger, captcha.NewMemoryStore(
+	svc := New(captcha.NewMemoryStore(
 		captcha.CollectNum,
 		captcha.Expiration,
-	), traceKey)
+	), "trace-id")
 
+	
     // 不想看到日志的可以不加
-	svc = NewLoggingServer(logger, svc)
-
+    svc = NewLogging(logger, "trace-id")(svc)
+    
 	var prefix = "/captcha/"
 
 	mux := http.NewServeMux()
-	mux.Handle(prefix, MakeHTTPHandler(logger, svc, opts, ems, prefix, func(ctx context.Context, w http.ResponseWriter, response interface{}) (err error) {
+	mux.Handle(prefix, MakeHTTPHandler(svc, opts, ems, prefix, func(ctx context.Context, w http.ResponseWriter, response interface{}) (err error) {
 		return kithttp.EncodeJSONResponse(ctx, w, response)
 	}))
 
@@ -120,7 +121,7 @@ svc := New(logger, captcha.NewMemoryStore(
 ), "trace-id")
 
 // 不想看到日志的可以不加
-svc = NewLoggingServer(logger, svc)
+svc = NewLogging(logger, "tarceId")(svc)
 
 // 使用验证 一般在中间件使用
 if !svc.VerifyCaptcha(ctx, req.Query.Get("captchaId"), req.Query.Get("verifyCode")) {

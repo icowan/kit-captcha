@@ -12,24 +12,48 @@ import (
 	"time"
 
 	"github.com/go-kit/kit/log"
-	"github.com/go-kit/kit/log/level"
 )
 
-type loggingServer struct {
+type logging struct {
 	logger  log.Logger
 	traceId string
-	Service
+	next    Service
 }
 
-func NewLoggingServer(logger log.Logger, s Service, traceId string) Service {
-	return &loggingServer{
-		logger:  level.Info(logger),
-		Service: s,
-		traceId: traceId,
+func (s *logging) GenCaptchaId(ctx context.Context) string {
+	defer func(begin time.Time) {
+		_ = s.logger.Log(
+			s.traceId, ctx.Value(s.traceId),
+			"method", "GenCaptchaId",
+			"took", time.Since(begin),
+		)
+	}(time.Now())
+	return s.next.GenCaptchaId(ctx)
+}
+
+func (s *logging) VerifyCaptcha(ctx context.Context, captchaId, verify string) bool {
+	defer func(begin time.Time) {
+		_ = s.logger.Log(
+			s.traceId, ctx.Value(s.traceId),
+			"method", "VerifyCaptcha", "captchaId", captchaId, "verify", verify,
+			"took", time.Since(begin),
+		)
+	}(time.Now())
+	return s.next.VerifyCaptcha(ctx, captchaId, verify)
+}
+
+func NewLogging(logger log.Logger, traceId string) Middleware {
+	logger = log.With(logger, "pkg.git", "logging")
+	return func(next Service) Service {
+		return &logging{
+			logger:  logger,
+			next:    next,
+			traceId: traceId,
+		}
 	}
 }
 
-func (s *loggingServer) Image(ctx context.Context, captchaId string, w, h int) []byte {
+func (s *logging) Image(ctx context.Context, captchaId string, w, h int) []byte {
 	defer func(begin time.Time) {
 		_ = s.logger.Log(
 			s.traceId, ctx.Value(s.traceId),
@@ -41,10 +65,10 @@ func (s *loggingServer) Image(ctx context.Context, captchaId string, w, h int) [
 			"err", "null",
 		)
 	}(time.Now())
-	return s.Service.Image(ctx, captchaId, w, h)
+	return s.next.Image(ctx, captchaId, w, h)
 }
 
-func (s *loggingServer) Refresh(ctx context.Context, w, h int) (captchaId string, res []byte) {
+func (s *logging) Refresh(ctx context.Context, w, h int) (captchaId string, res []byte) {
 	defer func(begin time.Time) {
 		_ = s.logger.Log(
 			s.traceId, ctx.Value(s.traceId),
@@ -56,5 +80,5 @@ func (s *loggingServer) Refresh(ctx context.Context, w, h int) (captchaId string
 			"err", "null",
 		)
 	}(time.Now())
-	return s.Service.Refresh(ctx, w, h)
+	return s.next.Refresh(ctx, w, h)
 }

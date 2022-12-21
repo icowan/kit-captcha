@@ -34,17 +34,17 @@ func ExampleNew() {
 
 	var ems []endpoint.Middleware
 
-	svc := New(logger, captcha.NewMemoryStore(
+	svc := New(captcha.NewMemoryStore(
 		captcha.CollectNum,
 		captcha.Expiration,
 	), "trace-id")
 
-	svc = NewLoggingServer(logger, svc, "trace-id")
+	svc = NewLogging(logger, "trace-id")(svc)
 
 	var prefix = "/captcha/"
 
 	mux := http.NewServeMux()
-	mux.Handle(prefix, MakeHTTPHandler(logger, svc, opts, ems, prefix, func(ctx context.Context, w http.ResponseWriter, response interface{}) (err error) {
+	mux.Handle(prefix, MakeHTTPHandler(svc, opts, ems, prefix, func(ctx context.Context, w http.ResponseWriter, response interface{}) (err error) {
 		return kithttp.EncodeJSONResponse(ctx, w, response)
 	}))
 
